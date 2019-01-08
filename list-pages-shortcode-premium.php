@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: List Pages Shortcode premium
-Plugin URI: https://introweb.co.il
+Plugin URI: https://github.com/tsz1412/list-pages-shortcode-premium.git
 Description: Introduces the [list-pages], [sibling-pages] and [child-pages] <a href="http://codex.wordpress.org/Shortcode_API">shortcodes</a> for easily displaying a list of pages within a post or page.  Both shortcodes accept all parameters that you can pass to the <a href="http://codex.wordpress.org/Template_Tags/wp_list_pages">wp_list_pages()</a> function.  For example, to show a page's child pages sorted by title simply add [child-pages sort_column="post_title"] in the page's content.
 Author: Ben Huson, Aaron Harp, Tsviel Zaikman
 Version: 1.0.0
