@@ -25,7 +25,12 @@ add_shortcode( 'sibling-pages', array( 'List_Pages_Shortcode', 'shortcode_list_p
 add_shortcode( 'list-pages', array( 'List_Pages_Shortcode', 'shortcode_list_pages' ) );
 add_filter( 'list_pages_shortcode_excerpt', array( 'List_Pages_Shortcode', 'excerpt_filter' ) );
 add_filter( 'list_pages_shortcode_thumbnail', array( 'List_Pages_Shortcode', 'thumbnail_filter' ) );
-wp_enqueue_style('lpac-styles', plugin_dir_url( __FILE__ ) . 'style.css' );
+add_action( 'wp_head', 'list_pages_shortcode_styles' );
+function list_pages_shortcode_styles(){
+	wp_enqueue_style('lpac-styles', plugin_dir_url( __FILE__ ) . 'style.css' );	
+}
+
+
 
 //Adds Translation to Click to call bar
 add_action('plugins_loaded', 'list_pages_shortcode_load_textdomain');
@@ -33,8 +38,8 @@ function list_pages_shortcode_load_textdomain() {
 	load_plugin_textdomain( 'click-to-call', false, dirname( plugin_basename(__FILE__) ) . '/languages/' );
 }
 
-//Include Styles and Scripts
-//function 
+
+
 
 //* Github Updater */
 add_action( 'init', 'list_pages_shortcode_updater_init' );
