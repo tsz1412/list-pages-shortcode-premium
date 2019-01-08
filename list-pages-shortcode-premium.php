@@ -5,22 +5,65 @@ Plugin Name: List Pages Shortcode premium
 Plugin URI: https://introweb.co.il
 Description: Introduces the [list-pages], [sibling-pages] and [child-pages] <a href="http://codex.wordpress.org/Shortcode_API">shortcodes</a> for easily displaying a list of pages within a post or page.  Both shortcodes accept all parameters that you can pass to the <a href="http://codex.wordpress.org/Template_Tags/wp_list_pages">wp_list_pages()</a> function.  For example, to show a page's child pages sorted by title simply add [child-pages sort_column="post_title"] in the page's content.
 Author: Ben Huson, Aaron Harp, Tsviel Zaikman
-Version: 2.0.0
+Version: 1.0.0
 Author URI: https://introweb.co.il
 */
+// If this file is called directly, abort.
+if ( ! defined( 'WPINC' ) ) {
+	die;
+}
+
+/**
+ * Currently plugin version.
+ * Start at version 1.0.0 and use SemVer - https://semver.org
+ * Rename this for your plugin and update it as you release new versions.
+ */
+define( 'PLUGIN_NAME_VERSION', '1.0.0' );
 
 add_shortcode( 'child-pages', array( 'List_Pages_Shortcode', 'shortcode_list_pages' ) );
 add_shortcode( 'sibling-pages', array( 'List_Pages_Shortcode', 'shortcode_list_pages' ) );
 add_shortcode( 'list-pages', array( 'List_Pages_Shortcode', 'shortcode_list_pages' ) );
 add_filter( 'list_pages_shortcode_excerpt', array( 'List_Pages_Shortcode', 'excerpt_filter' ) );
 add_filter( 'list_pages_shortcode_thumbnail', array( 'List_Pages_Shortcode', 'thumbnail_filter' ) );
+wp_enqueue_style('lpac-styles', plugin_dir_url( __FILE__ ) . 'style.css' );
 
+//Adds Translation to Click to call bar
+add_action('plugins_loaded', 'list_pages_shortcode_load_textdomain');
+function list_pages_shortcode_load_textdomain() {
+	load_plugin_textdomain( 'click-to-call', false, dirname( plugin_basename(__FILE__) ) . '/languages/' );
+}
+
+//Include Styles and Scripts
+//function 
+
+//* Github Updater */
+add_action( 'init', 'list_pages_shortcode_updater_init' );
+function list_pages_shortcode_updater_init() {
+	require_once plugin_dir_path( __FILE__ ) . 'update.php';
+	if ( is_admin() ) { // note the use of is_admin() to double check that this is happening in the admin
+		$config = array(
+			'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
+			'proper_folder_name' => 'list-page-and-children', // this is the name of the folder your plugin lives in
+			'api_url' => 'https://api.github.com/repos/tsz1412/list-pages-shortcode-premium', // the GitHub API url of your GitHub repo
+			'raw_url' => 'https://raw.github.com/tsz1412/list-pages-shortcode-premium/master', // the GitHub raw url of your GitHub repo
+			'github_url' => 'https://github.com/tsz1412/list-pages-shortcode-premium', // the GitHub url of your GitHub repo
+			'zip_url' => 'https://github.com/tsz1412/list-pages-shortcode-premium/zipball/master', // the zip url of the GitHub repo
+			'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
+			'requires' => '3.0', // which version of WordPress does your plugin require?
+			'tested' => '5.0.2', // which version of WordPress is your plugin tested up to?
+			'readme' => 'readme.txt', // which file to use as the readme for the version number
+			'access_token' => '', // Access private repositories by authorizing under Appearance > GitHub Updates when this example plugin is installed
+		);
+
+		new plugin_updater( $config );
+
+	}
+
+}
+//* Github Updater */
 class List_Pages_Shortcode {
-
-	
 	public function __construct() {
 		// @todo  Deprecate use of constructor
-		//wp_enqueue_style('style.css', plugin_url('style.css',__FILE__));
 	}
 
 	public function List_Pages_Shortcode() {
